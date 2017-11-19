@@ -11,16 +11,63 @@ namespace CMSAPI.Data
         {
         }
 
-        public DbSet<Items> Items { get; set; }
-        public DbSet<Pages> Pages { get; set; }
-        public DbSet<Projects> Projects { get; set; }
-        public DbSet<Templates> Templates { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<Template> Templates { get; set; }
+        public DbSet<Item> Items { get; set; }
+        public DbSet<Page> Pages { get; set; }
+        public DbSet<ContentType> ContentTypes { get; set; }
 
-        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-        }*/
+            modelBuilder.Entity<Project>().ToTable("Project");   
+            modelBuilder.Entity<Template>().ToTable("Template").Property(i => i.ID);
+            modelBuilder.Entity<Item>().ToTable("Item");
+            modelBuilder.Entity<Page>().ToTable("Page");        
+            modelBuilder.Entity<ContentType>().ToTable("ContentType");
+
+            modelBuilder.Entity<Page>() 
+            .HasOne(u => u.Template)
+            .WithMany(u => u.Pages)
+            .IsRequired().OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Item>()
+            .HasOne(u => u.Page)
+            .WithMany(u => u.Items)
+            .IsRequired().OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Item>()
+            .HasOne(u => u.Page)
+            .WithMany(u => u.Items)
+            .IsRequired().OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Item>()
+            .HasOne(u => u.Project)
+            .WithMany(u => u.Items)
+            .IsRequired().OnDelete(DeleteBehavior.Restrict);
+            
+            modelBuilder.Entity<Template>()
+            .HasOne(u => u.Project)
+                        .WithMany(u => u.Templates);
+            
+            modelBuilder.Entity<Project>()
+                        .HasMany(u => u.Templates)
+                        .WithOne(x => x.Project);
+
+            modelBuilder.Entity<Project>()
+                        .HasMany(u => u.Items)
+                        .WithOne(x => x.Project);
+
+            modelBuilder.Entity<Project>()
+                        .HasMany(u => u.Pages)
+                        .WithOne(x => x.Project);
+            
+            /*modelBuilder.Entity<Project>()
+                .HasKey(c => new { c. });
+            modelBuilder.Entity<Template>()
+                .HasKey(c => new { c.ProjectID, c.PageID });*/
+        }
 
     }
 }

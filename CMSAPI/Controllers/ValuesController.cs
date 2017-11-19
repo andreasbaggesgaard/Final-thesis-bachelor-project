@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CMSAPI.Data;
 using CMSAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CMSAPI.Controllers
 {
@@ -16,34 +17,45 @@ namespace CMSAPI.Controllers
         public ValuesController(CMSContext context)
         {
             _context = context;
-
-            if (_context.Items.Count() == 0)
-            {
-                _context.Items.Add(new Items { Text = "Some question" });
-                _context.SaveChanges();
-            }
         }
 
         // GET api/values
         [HttpGet]
-        public IEnumerable<Items> Get()
+        public IEnumerable<Item> Get()
         {
             return _context.Items.ToList();
-            //return new string[] { "value1", "value2" };
-        }
+        } 
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int? id)
         {
-            return "value";
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var sproject = await _context.Projects
+                 .Where(i => i.ID == id)
+                 .Include(c => c.Templates)
+                 .Include(c => c.Items)
+                 .Include(c => c.Pages)
+                 .Include(c => c.ContentTypes)
+                 .AsNoTracking()
+                 .SingleOrDefaultAsync(m => m.ID == id);
+            if (sproject == null)
+            {
+                return NotFound();
+            }
+
+            return new ObjectResult(sproject);
         }
 
         // POST api/values
         [HttpPost]
         public void Post([FromBody]string value)
         {
-            _context.Items.Add(new Items { Text = "Some question" });
+            _context.Items.Add(new Item { Name = "Some question" });
             _context.SaveChanges();
         }
 
