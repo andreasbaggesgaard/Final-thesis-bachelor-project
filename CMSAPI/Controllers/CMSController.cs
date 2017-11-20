@@ -24,7 +24,7 @@ namespace CMSAPI.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "hello", "world" };
+            return new string[] { "hello", "world" };  
         } 
 
         // GET api/project/5
