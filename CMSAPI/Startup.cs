@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data;
 using CMSAPI.Models;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Newtonsoft.Json;
 
 namespace CMSAPI
 {
@@ -31,10 +32,12 @@ namespace CMSAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
             services.AddSession();
             services.AddEntityFrameworkSqlServer();
-            services.AddScoped<IDBService, DBService>();
+            services.AddScoped<ICMSRepository, CMSRepository>();
             services.AddDbContext<CMSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
             //services.AddIdentity<Person, IdentityRole>()
                 //.AddEntityFrameworkStores<CMSContext>()
