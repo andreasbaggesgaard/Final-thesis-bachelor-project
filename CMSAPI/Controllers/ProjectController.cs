@@ -22,13 +22,13 @@ namespace CMSAPI.Controllers
 
         // GET api/project
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Project> GetAll()
         {
-            return new string[] { "hello", "world" };  
-        } 
+            return _CMSRepository.GetAllProjects();
+        }
 
         // GET api/project/5
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             var ProjectContent = await _CMSRepository.GetAllProjectContent(id);
@@ -42,21 +42,22 @@ namespace CMSAPI.Controllers
 
         // POST api/project
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]Project value)
+        public async Task<IActionResult> Post(Project value)
         {
             if (value == null)
             {
                 return BadRequest();
             }
-            var project = new Project { Name = "NewProject"};
+            var project = new Project { Name = "new name", Created = new DateTime(2008, 3, 1, 7, 0, 0) };
             await _CMSRepository.AddProject(project);
 
             return new NoContentResult();
         }
 
         // PUT api/project/5
+        // [FromBody]Project value
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody]Project value)
+        public async Task<IActionResult> Put(int id, Project value)
         {
             if (value == null || value.ID != id)
             {
@@ -69,7 +70,8 @@ namespace CMSAPI.Controllers
                 return NotFound();
             }
 
-            project.Name = value.Name;
+            //project.Name = value.Name;
+            project.Name = "new name";
 
             await _CMSRepository.EditProject(project);
             return new NoContentResult();

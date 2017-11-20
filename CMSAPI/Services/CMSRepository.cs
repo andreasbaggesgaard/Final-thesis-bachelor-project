@@ -19,6 +19,11 @@ namespace CMSAPI.Services
             _context = context;
         }
 
+        public IEnumerable<Project> GetAllProjects()
+        {
+            return _context.Projects.ToList();
+        }
+
         // Projects
         public async Task<IEnumerable<Project>> GetAllProjectContent(int id)
         {
