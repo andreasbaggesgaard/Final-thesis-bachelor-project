@@ -19,9 +19,9 @@ namespace CMSAPI.Services
             _context = context;
         }
 
-        public IEnumerable<Project> GetAllProjects()
+        public async Task<IEnumerable<Project>> GetAllProjects()
         {
-            return _context.Projects.ToList();
+            return await _context.Projects.ToListAsync();
         }
 
         // Projects

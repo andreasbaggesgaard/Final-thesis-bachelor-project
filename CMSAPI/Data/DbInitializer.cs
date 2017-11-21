@@ -15,11 +15,25 @@ namespace CMSAPI.Data
                 return;   // DB has been seeded
             }
 
+            var people = new Person[]
+            {
+                new Person { Id = "123A", UserName = "user1", PasswordHash = "asdaklkkkdkkd"  },
+                new Person { Id = "123B", UserName = "user2", PasswordHash = "asdaklkkkdkkd"  },
+                new Person { Id = "123C", UserName = "user3", PasswordHash = "asdaklkkkdkkd"  }
+
+            };
+
+            foreach (Person p in people)
+            {
+                context.People.Add(p);
+            }
+            context.SaveChanges();
+
             var projects = new Project[]
             {
-                new Project { Name = "project1", Created = new DateTime(2008, 3, 1, 7, 0, 0) },
-                new Project { Name = "project2", Created = new DateTime(2008, 3, 1, 7, 0, 0) },
-                new Project { Name = "project3", Created = new DateTime(2008, 3, 1, 7, 0, 0) }
+                new Project { Name = "project1", Created = new DateTime(2008, 3, 1, 7, 0, 0), PersonID = people.Single(p => p.Id == "123A").Id },
+                new Project { Name = "project2", Created = new DateTime(2008, 3, 1, 7, 0, 0), PersonID = people.Single(p => p.Id == "123B").Id },
+                new Project { Name = "project3", Created = new DateTime(2008, 3, 1, 7, 0, 0), PersonID = people.Single(p => p.Id == "123C").Id }
             };
 
             foreach (Project p in projects)

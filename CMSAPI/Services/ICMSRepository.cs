@@ -7,7 +7,7 @@ namespace CMSAPI.Services
 {
     public interface ICMSRepository
     {
-        IEnumerable<Project> GetAllProjects();
+        Task<IEnumerable<Project>> GetAllProjects();
         Task<IEnumerable<Project>> GetAllProjectContent(int id);
         Task<Project> AddProject(Project newProject);
         Project GetProject(int id);

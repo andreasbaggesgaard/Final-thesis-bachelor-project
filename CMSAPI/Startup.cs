@@ -17,6 +17,7 @@ using Microsoft.Data;
 using CMSAPI.Models;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Identity;
 
 namespace CMSAPI
 {
@@ -39,9 +40,9 @@ namespace CMSAPI
             services.AddEntityFrameworkSqlServer();
             services.AddScoped<ICMSRepository, CMSRepository>();
             services.AddDbContext<CMSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
-            //services.AddIdentity<Person, IdentityRole>()
-                //.AddEntityFrameworkStores<CMSContext>()
-                //.AddDefaultTokenProviders();
+            services.AddIdentity<Person, IdentityRole>()
+                .AddEntityFrameworkStores<CMSContext>()
+                .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +52,8 @@ namespace CMSAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseAuthentication();
 
             app.UseMvc();
 

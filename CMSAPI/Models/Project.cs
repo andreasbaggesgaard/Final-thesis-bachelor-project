@@ -8,7 +8,10 @@ namespace CMSAPI.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public DateTime Created { get; set; }
+        public string PersonID { get; set; }
+
        
+        public Person Person { get; set; }
         public ICollection<Item> Items { get; set; }
         public ICollection<Page> Pages { get; set; }
         public ICollection<ContentType> ContentTypes { get; set; }

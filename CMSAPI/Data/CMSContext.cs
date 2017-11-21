@@ -5,79 +5,81 @@ using CMSAPI.Models;
 
 namespace CMSAPI.Data
 {
-    public class CMSContext : DbContext
+    public class CMSContext : IdentityDbContext<Person>
     {
         public CMSContext(DbContextOptions<CMSContext> options) : base(options)
         {
         }
 
+        public DbSet<Person> People { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Template> Templates { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<Page> Pages { get; set; }
         public DbSet<ContentType> ContentTypes { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
-            modelBuilder.Entity<Project>().ToTable("Project");  
-            modelBuilder.Entity<Template>().ToTable("Template");
-            modelBuilder.Entity<Item>().ToTable("Item");
-            modelBuilder.Entity<Page>().ToTable("Page");      
-            modelBuilder.Entity<ContentType>().ToTable("ContentType");
-
-            modelBuilder.Entity<Page>() 
+            builder.Entity<Person>().ToTable("User");
+            builder.Entity<Project>().ToTable("Project");  
+            builder.Entity<Template>().ToTable("Template");
+            builder.Entity<Item>().ToTable("Item");
+            builder.Entity<Page>().ToTable("Page");      
+            builder.Entity<ContentType>().ToTable("ContentType");
+            
+            builder.Entity<Page>() 
             .HasOne(u => u.Template)
             .WithMany(u => u.Pages)
             .IsRequired().OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Page>()
+            builder.Entity<Page>()
             .HasOne(u => u.Project)
             .WithMany(u => u.Pages)
             .IsRequired().OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Page>()
+            builder.Entity<Page>()
             .HasMany(u => u.Items)
             .WithOne(u => u.Page)
             .IsRequired().OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Item>()
+            builder.Entity<Item>()
             .HasOne(u => u.Page)
             .WithMany(u => u.Items)
             .IsRequired().OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Item>()
+            builder.Entity<Item>()
             .HasOne(u => u.Page)
             .WithMany(u => u.Items)
             .IsRequired().OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Item>()
+            builder.Entity<Item>()
             .HasOne(u => u.Project)
             .WithMany(u => u.Items)
             .IsRequired().OnDelete(DeleteBehavior.Restrict);
             
-            modelBuilder.Entity<Template>()
+            builder.Entity<Template>()
             .HasOne(u => u.Project)
             .WithMany(u => u.Templates);
             
-            modelBuilder.Entity<Project>()
+            builder.Entity<Project>()
             .HasMany(u => u.Templates)
             .WithOne(x => x.Project);
 
-            modelBuilder.Entity<Project>()
+            builder.Entity<Project>()
             .HasMany(u => u.Items)
             .WithOne(x => x.Project);
 
-            modelBuilder.Entity<Project>()
+            builder.Entity<Project>()
             .HasMany(u => u.Pages)
             .WithOne(x => x.Project);
 
-            modelBuilder.Entity<Project>()
+            builder.Entity<Project>()
             .HasMany(u => u.Templates)
             .WithOne(x => x.Project);
 
-            modelBuilder.Entity<Project>()
+            builder.Entity<Project>()
             .HasMany(u => u.ContentTypes)
             .WithOne(x => x.Project);
 

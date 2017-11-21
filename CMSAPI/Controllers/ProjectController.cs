@@ -7,6 +7,7 @@ using CMSAPI.Data;
 using CMSAPI.Models;
 using CMSAPI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CMSAPI.Controllers
 {
@@ -21,10 +22,11 @@ namespace CMSAPI.Controllers
         }
 
         // GET api/project
+        [Authorize] 
         [HttpGet]
-        public IEnumerable<Project> GetAll()
+        public async Task<IEnumerable<Project>> GetAll()
         {
-            return _CMSRepository.GetAllProjects();
+            return await _CMSRepository.GetAllProjects();
         }
 
         // GET api/project/5
@@ -42,6 +44,7 @@ namespace CMSAPI.Controllers
 
         // POST api/project
         [HttpPost]
+        //[Authorize] 
         public async Task<IActionResult> Post(Project value)
         {
             if (value == null)
