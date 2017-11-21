@@ -89,7 +89,6 @@ namespace CMSAPI.Controllers
             {
                 return NotFound();
             }
-
             await _CMSRepository.RemoveProject(id);
             return new NoContentResult();
         }
