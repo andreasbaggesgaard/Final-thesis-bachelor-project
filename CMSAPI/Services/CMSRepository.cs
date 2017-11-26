@@ -27,8 +27,6 @@ namespace CMSAPI.Services
         // Users
         public async Task<bool> CreateUser(string username, string password)
         {
-            username = "andreasbaggesgaard";
-            password = "Andreas1912c7a3@";
             var user = new Person { UserName = username, Joined = DateTime.Now.ToString() };
             IdentityResult result = await _userManager.CreateAsync(user, password);
             if (result.Succeeded) { return true; } else { return false; }

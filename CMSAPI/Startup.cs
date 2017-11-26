@@ -36,11 +36,20 @@ namespace CMSAPI
             services.AddMvc().AddJsonOptions(options => {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
+
+            services.AddCors();
             services.AddSession();
             services.AddEntityFrameworkSqlServer();
             services.AddScoped<ICMSRepository, CMSRepository>();
             services.AddDbContext<CMSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
-            services.AddIdentity<Person, IdentityRole>()
+            services.AddIdentity<Person, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 1;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+            })
                 .AddEntityFrameworkStores<CMSContext>()
                 .AddDefaultTokenProviders();
         }
@@ -52,6 +61,8 @@ namespace CMSAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(options => options.AllowAnyOrigin());
 
             app.UseAuthentication();
 

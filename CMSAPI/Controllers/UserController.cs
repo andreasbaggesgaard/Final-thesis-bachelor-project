@@ -7,6 +7,7 @@ using CMSAPI.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace CMSAPI.Controllers
 {
@@ -38,8 +39,12 @@ namespace CMSAPI.Controllers
 
         // POST api/user/newuser
         [HttpPost("newuser")]
-        public async Task<IActionResult> CreateUser(string username, string password)
+        public async Task<IActionResult> CreateUser([FromBody]JObject jsonData)
         {
+            Test test = jsonData.ToObject<Test>();
+            string username = test.Username;
+            string password = test.Password;
+
             bool result = await _CMSRepository.CreateUser(username, password);
             if (result)
             {

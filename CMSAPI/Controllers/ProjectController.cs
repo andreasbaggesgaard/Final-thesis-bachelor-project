@@ -44,14 +44,20 @@ namespace CMSAPI.Controllers
 
         // POST api/project
         [HttpPost]
-        //[Authorize] 
         public async Task<IActionResult> Post(Project value)
         {
             if (value == null)
             {
                 return BadRequest();
             }
-            var project = new Project { Name = "new name", Created = new DateTime(2008, 3, 1, 7, 0, 0) };
+            var project = new Project
+            {
+                ID = value.ID,
+                Name = value.Name,
+                Created = DateTime.Now,
+                PersonID = "123"
+            };
+
             await _CMSRepository.AddProject(project);
 
             return new NoContentResult();
