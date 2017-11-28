@@ -10,7 +10,7 @@ namespace CMSAPI.Models
         public string Text { get; set; }
         public string Image { get; set; }      
         public int TemplateID { get; set; }
-        public int ProjectID { get; set; }
+        public string ProjectID { get; set; }
 
         public Template Template { get; set; }
         public ICollection<Item> Items { get; set; }

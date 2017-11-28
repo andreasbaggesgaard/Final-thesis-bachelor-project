@@ -25,10 +25,20 @@ namespace CMSAPI.Services
         }
 
         // Users
-        public async Task<bool> CreateUser(string username, string password)
+        public async Task<bool> CreateUser(ApiUser obj)
         {
-            var user = new Person { UserName = username, Joined = DateTime.Now.ToString() };
-            IdentityResult result = await _userManager.CreateAsync(user, password);
+            var user = new Person { 
+                Id = obj.Uid,
+                UserName = obj.Username, 
+                Email = obj.Email,
+                Name = obj.Name,
+                Picture = "picture",
+                PhoneNumber = obj.Phone,
+                Age = obj.Age,
+                Country = obj.Country,
+                Joined = obj.Joined 
+            };
+            IdentityResult result = await _userManager.CreateAsync(user, obj.Password);
             if (result.Succeeded) { return true; } else { return false; }
         }
 
@@ -52,7 +62,7 @@ namespace CMSAPI.Services
             return await _context.Projects.ToListAsync();
         }
 
-        public async Task<IEnumerable<Project>> GetAllProjectContent(int id)
+        public async Task<IEnumerable<Project>> GetAllProjectContent(string id)
         {
             var ProjectContent = await _context.Projects
                 .Include(i => i.Pages)
@@ -66,17 +76,28 @@ namespace CMSAPI.Services
 
         public async Task<Project> AddProject(Project newProject)
         {
-            await _context.Projects.AddAsync(newProject);
+            var project = new Project
+            {
+                ID = newProject.ID,
+                Name = newProject.Name,
+                Created = DateTime.Now.ToString(),
+                Background = "",
+                NavbarColor = "",
+                Theme = "",
+                Configured = false
+            };
+
+            await _context.Projects.AddAsync(project);
             await _context.SaveChangesAsync();
             return newProject;
         }
 
-        public Project GetProject(int id)
+        public Project GetProject(string id)
         {
             return _context.Projects.FirstOrDefault(i => i.ID == id);
         }
 
-        public async Task<Project> RemoveProject(int id)
+        public async Task<Project> RemoveProject(string id)
         {
             var item = GetProject(id);
 

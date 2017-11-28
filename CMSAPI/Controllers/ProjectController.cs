@@ -8,6 +8,7 @@ using CMSAPI.Models;
 using CMSAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json.Linq;
 
 namespace CMSAPI.Controllers
 {
@@ -31,7 +32,7 @@ namespace CMSAPI.Controllers
 
         // GET api/project/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(string id)
         {
             var ProjectContent = await _CMSRepository.GetAllProjectContent(id);
                                                                      
@@ -42,21 +43,15 @@ namespace CMSAPI.Controllers
             return new ObjectResult(ProjectContent);
         }
 
-        // POST api/project
-        [HttpPost]
-        public async Task<IActionResult> Post(Project value)
+        // POST api/project/newproject
+        [HttpPost("newproject")]
+        public async Task<IActionResult> Post([FromBody]JObject value)
         {
             if (value == null)
             {
                 return BadRequest();
             }
-            var project = new Project
-            {
-                ID = value.ID,
-                Name = value.Name,
-                Created = DateTime.Now,
-                PersonID = "123"
-            };
+            Project project = value.ToObject<Project>();
 
             await _CMSRepository.AddProject(project);
 
@@ -66,7 +61,7 @@ namespace CMSAPI.Controllers
         // PUT api/project/5
         // [FromBody]Project value
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Project value)
+        public async Task<IActionResult> Put(string id, Project value)
         {
             if (value == null || value.ID != id)
             {
@@ -88,7 +83,7 @@ namespace CMSAPI.Controllers
 
         // DELETE api/project/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
             var project = _CMSRepository.GetProject(id);
             if (project == null)

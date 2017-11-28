@@ -10,7 +10,7 @@ namespace CMSAPI.Models
         public bool Used { get; set; }
         public int ContentTypeID { get; set; }
         public int PageID { get; set; }
-        public int ProjectID { get; set; }
+        public string ProjectID { get; set; }
 
 
         public ContentType ContentType { get; set; }

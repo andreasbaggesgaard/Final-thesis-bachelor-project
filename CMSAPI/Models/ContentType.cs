@@ -7,7 +7,7 @@ namespace CMSAPI.Models
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public int ProjectID { get; set; }
+        public string ProjectID { get; set; }
 
         public Item Item { get; set; }
         public Project Project { get; set; }

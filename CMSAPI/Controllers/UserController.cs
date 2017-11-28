@@ -41,11 +41,14 @@ namespace CMSAPI.Controllers
         [HttpPost("newuser")]
         public async Task<IActionResult> CreateUser([FromBody]JObject jsonData)
         {
-            Test test = jsonData.ToObject<Test>();
-            string username = test.Username;
-            string password = test.Password;
+            if (jsonData == null)
+            {
+                return BadRequest();
+            }
 
-            bool result = await _CMSRepository.CreateUser(username, password);
+            ApiUser user = jsonData.ToObject<ApiUser>();
+
+            bool result = await _CMSRepository.CreateUser(user);
             if (result)
             {
                 return Ok();
@@ -61,7 +64,7 @@ namespace CMSAPI.Controllers
         public async Task<IActionResult> Login(string username, string password)
         {
             bool result = await _CMSRepository.Login(username, password);
-            if (result)
+            if (result) 
             {
                 return Ok();
             }
@@ -76,7 +79,8 @@ namespace CMSAPI.Controllers
         public async Task<IActionResult> Logout()
         {
             bool result = await _CMSRepository.Logout();
-            if(result) {
+            if(result) 
+            {
                 return Ok();
             }
             else 
