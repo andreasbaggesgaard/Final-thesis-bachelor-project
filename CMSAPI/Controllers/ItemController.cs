@@ -19,18 +19,18 @@ namespace CMSAPI.Controllers
             _CMSRepository = CMSRepository;
         }
 
-        // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET api/item/5
         [HttpGet("{id}")]
         public async Task<IEnumerable<Item>> Get(string id)
         {
             return await _CMSRepository.GetAllItems(id);
+        }
+
+        // GET api/item/5/4
+        [HttpGet("{id}/{pageid}")]
+        public async Task<IEnumerable<Item>> GetPageItems(string id, int pageid)
+        {
+            return await _CMSRepository.GetPageItems(id, pageid);
         }
 
         // POST api/item/new
@@ -50,8 +50,27 @@ namespace CMSAPI.Controllers
 
         // PUT api/item/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<IActionResult> Put(int id, [FromBody]Item i)
         {
+            if (i == null || i.ID != id)
+            {
+                return BadRequest();
+            }
+
+            var item = await _CMSRepository.GetItem(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            item.Name = i.Name;
+            item.Title = i.Title;
+            item.Text = i.Text;
+            item.Image = i.Image;
+            item.SortNumber = i.SortNumber;
+
+            await _CMSRepository.EditItem(item);
+            return new NoContentResult();
         }
 
         // DELETE api/item/5

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CMSAPI.Models;
+using CMSAPI.Models.ApiModels;
 using CMSAPI.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -37,6 +38,14 @@ namespace CMSAPI.Controllers
             return "value";
         }
 
+        // GET api/user/authenticated
+        [HttpGet("authenticated")]
+        public bool GetUserAuth()
+        {
+            bool isAuthenticated = User.Identity.IsAuthenticated;
+            return isAuthenticated;
+        }
+
         // POST api/user/newuser
         [HttpPost("newuser")]
         public async Task<IActionResult> CreateUser([FromBody]JObject jsonData)
@@ -61,8 +70,10 @@ namespace CMSAPI.Controllers
 
         // POST api/user/login
         [HttpPost("login")]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login([FromBody]ApiLogin user)
         {
+            string username = user.Username;
+            string password = user.Password;
             bool result = await _CMSRepository.Login(username, password);
             if (result) 
             {

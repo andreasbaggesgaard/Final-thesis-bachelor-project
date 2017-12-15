@@ -12,12 +12,12 @@ namespace CMSAPI.Models
         public string NavbarColor { get; set; }
         public string Theme { get; set; }
         public bool Configured { get; set; }
-        //public string PersonID { get; set; }
               
         public Person Person { get; set; }
+        public ICollection<Menu> Menu { get; set; }
         public ICollection<Item> Items { get; set; }
         public ICollection<Page> Pages { get; set; }
-        public ICollection<ContentType> ContentTypes { get; set; }
+        //public ICollection<ContentType> ContentTypes { get; set; }
         public ICollection<Template> Templates { get; set; }
 
     }

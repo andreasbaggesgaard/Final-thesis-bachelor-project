@@ -7,16 +7,14 @@ using CMSAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace CMSAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class ItemController : Controller
+    public class PageController : Controller
     {
         private readonly ICMSRepository _CMSRepository;
 
-        public ItemController(ICMSRepository CMSRepository)
+        public PageController(ICMSRepository CMSRepository)
         {
             _CMSRepository = CMSRepository;
         }
@@ -28,11 +26,21 @@ namespace CMSAPI.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/item/5
+        // GET api/page/5
         [HttpGet("{id}")]
-        public async Task<IEnumerable<Item>> Get(string id)
+        public async Task<IActionResult> Get(string pid)
         {
-            return await _CMSRepository.GetAllItems(id);
+            if (string.IsNullOrWhiteSpace(pid))
+            { 
+                return NotFound();
+            } else {
+                var pages = await _CMSRepository.GetAllPages(pid);
+                if (pages == null)
+                {
+                    return NotFound();
+                }
+                return new ObjectResult(pages);
+            }
         }
 
         // POST api/item/new
@@ -43,29 +51,29 @@ namespace CMSAPI.Controllers
             {
                 return BadRequest();
             }
-            Item item = value.ToObject<Item>();
+            Page page = value.ToObject<Page>();
 
-            await _CMSRepository.AddItem(item);
+            await _CMSRepository.AddPage(page);
 
             return new NoContentResult();
         }
 
-        // PUT api/item/5
+        // PUT api/page/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/item/5
+        // DELETE api/page/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var item = _CMSRepository.GetItem(id);
-            if (item == null)
+            var page = _CMSRepository.GetPage(id);
+            if (page == null)
             {
                 return NotFound();
             }
-            await _CMSRepository.RemoveItem(id);
+            await _CMSRepository.RemovePage(id);
             return new NoContentResult();
         }
     }

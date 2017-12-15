@@ -12,6 +12,7 @@ namespace CMSAPI.Data
         }
 
         public DbSet<Person> People { get; set; }
+        public DbSet<Menu> Menus { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Template> Templates { get; set; }
         public DbSet<Item> Items { get; set; }
@@ -23,6 +24,7 @@ namespace CMSAPI.Data
             base.OnModelCreating(builder);
 
             builder.Entity<Person>().ToTable("User");
+            builder.Entity<Menu>().ToTable("Menu");
             builder.Entity<Project>().ToTable("Project");  
             builder.Entity<Template>().ToTable("Template");
             builder.Entity<Item>().ToTable("Item");
@@ -37,21 +39,6 @@ namespace CMSAPI.Data
             builder.Entity<Page>()
             .HasOne(u => u.Project)
             .WithMany(u => u.Pages)
-            .IsRequired().OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Page>()
-            .HasMany(u => u.Items)
-            .WithOne(u => u.Page)
-            .IsRequired().OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Item>()
-            .HasOne(u => u.Page)
-            .WithMany(u => u.Items)
-            .IsRequired().OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Item>()
-            .HasOne(u => u.Page)
-            .WithMany(u => u.Items)
             .IsRequired().OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Item>()
@@ -78,10 +65,13 @@ namespace CMSAPI.Data
             builder.Entity<Project>()
             .HasMany(u => u.Templates)
             .WithOne(x => x.Project);
-
+            
             builder.Entity<Project>()
-            .HasMany(u => u.ContentTypes)
-            .WithOne(x => x.Project);
+                   .HasMany(u => u.Menu)
+                   .WithOne(x => x.Project);
+
+            builder.Entity<Menu>()
+                .HasKey(c => new { c.PageID, c.ProjectID });
 
         }
 

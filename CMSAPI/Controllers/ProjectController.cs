@@ -23,19 +23,33 @@ namespace CMSAPI.Controllers
         }
 
         // GET api/project
-        [Authorize] 
         [HttpGet]
         public async Task<IEnumerable<Project>> GetAll()
         {
             return await _CMSRepository.GetAllProjects();
         }
 
-        // GET api/project/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        // GET api/project/all/5
+        [Authorize] 
+        [HttpGet("all/{id}")]
+        public async Task<IActionResult> GetAll(string id)
         {
             var ProjectContent = await _CMSRepository.GetAllProjectContent(id);
                                                                      
+            if (ProjectContent == null)
+            {
+                return NotFound();
+            }
+            return new ObjectResult(ProjectContent);
+        }
+
+        // GET api/project/5
+        //[Authorize] 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            var ProjectContent = await _CMSRepository.GetProject(id);
+
             if (ProjectContent == null)
             {
                 return NotFound();
@@ -59,23 +73,25 @@ namespace CMSAPI.Controllers
         }
 
         // PUT api/project/5
-        // [FromBody]Project value
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, Project value)
+        public async Task<IActionResult> Put(string id, [FromBody]Project value)
         {
             if (value == null || value.ID != id)
             {
                 return BadRequest();
             }
 
-            var project = _CMSRepository.GetProject(id);
+            var project = await _CMSRepository.GetProject(id);
             if (project == null)
             {
                 return NotFound();
             }
 
-            //project.Name = value.Name;
-            project.Name = "new name";
+            project.Name = value.Name;
+            project.Background = value.Background;
+            project.NavbarColor = value.NavbarColor;
+            project.Theme = value.Theme;
+            project.Configured = value.Configured;
 
             await _CMSRepository.EditProject(project);
             return new NoContentResult();

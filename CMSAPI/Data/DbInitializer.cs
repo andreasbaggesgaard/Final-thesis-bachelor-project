@@ -10,10 +10,12 @@ namespace CMSAPI.Data
              
             context.Database.EnsureCreated();
 
-            if (context.Items.Any())
+            if (context.ContentTypes.Any())
             {
-                return;   // DB has been seeded
+                return;
             }
+
+            /*
 
             var people = new Person[]
             {
@@ -45,8 +47,7 @@ namespace CMSAPI.Data
             var templates = new Template[]
             {
                 new Template { Name = "template1", ProjectID = projects.Single(p => p.ID == "123A").ID },
-                new Template { Name = "template2", ProjectID = projects.Single(p => p.ID == "123B").ID },
-                new Template { Name = "template2", ProjectID = projects.Single(p => p.ID == "123C").ID }
+                new Template { Name = "template2", ProjectID = projects.Single(p => p.ID == "123B").ID }
             };
 
             foreach (Template p in templates)
@@ -66,13 +67,17 @@ namespace CMSAPI.Data
             {
                 context.Pages.Add(p);
             }
-            context.SaveChanges();
+            context.SaveChanges();*/
 
             var contenttypes = new ContentType[]
             { 
-                new ContentType { Name = "Contenttype1", ProjectID = projects.Single(p => p.ID == "123A").ID },
-                new ContentType { Name = "Contenttype2", ProjectID = projects.Single(p => p.ID == "123B").ID },
-                new ContentType { Name = "Contenttype3", ProjectID = projects.Single(p => p.ID == "123C").ID }
+                new ContentType { Name = "Title" },
+                new ContentType { Name = "Text" },
+                new ContentType { Name = "Image" },
+                new ContentType { Name = "Title and Text" },
+                new ContentType { Name = "Title, Text and Image" },
+                new ContentType { Name = "Title and Image" },
+                new ContentType { Name = "Text and Image" },
             };
 
             foreach (ContentType c in contenttypes)
@@ -81,20 +86,20 @@ namespace CMSAPI.Data
             }
             context.SaveChanges();
 
-            var items = new Item[]
+            /*var items = new Item[]
             {
-                new Item { Name = "Item1", PageID = pages.Single(c => c.ID == 1).ID, ContentTypeID = contenttypes.Single(c => c.ID == 1).ID, ProjectID = projects.Single(p => p.ID == "123A").ID},
-                new Item { Name = "Item2", PageID = pages.Single(c => c.ID == 2).ID, ContentTypeID = contenttypes.Single(c => c.ID == 2).ID, ProjectID = projects.Single(p => p.ID == "123B").ID},
-                new Item { Name = "Item3", PageID = pages.Single(c => c.ID == 2).ID, ContentTypeID = contenttypes.Single(c => c.ID == 2).ID, ProjectID = projects.Single(p => p.ID == "123B").ID},
-                new Item { Name = "Item4", PageID = pages.Single(c => c.ID == 2).ID, ContentTypeID = contenttypes.Single(c => c.ID == 2).ID, ProjectID = projects.Single(p => p.ID == "123B").ID},
-                new Item { Name = "Item5", PageID = pages.Single(c => c.ID == 1).ID, ContentTypeID = contenttypes.Single(c => c.ID == 1).ID, ProjectID = projects.Single(p => p.ID == "123A").ID}
+                new Item { Name = "Item1", PageID = pages.Single(c => c.ID == 1).ID, ProjectID = projects.Single(p => p.ID == "123A").ID},
+                new Item { Name = "Item2", PageID = pages.Single(c => c.ID == 2).ID, ProjectID = projects.Single(p => p.ID == "123B").ID},
+                new Item { Name = "Item3", PageID = pages.Single(c => c.ID == 2).ID, ProjectID = projects.Single(p => p.ID == "123B").ID},
+                new Item { Name = "Item4", PageID = pages.Single(c => c.ID == 2).ID, ProjectID = projects.Single(p => p.ID == "123B").ID},
+                new Item { Name = "Item5", PageID = pages.Single(c => c.ID == 1).ID, ProjectID = projects.Single(p => p.ID == "123A").ID}
             };
 
             foreach (Item i in items)
             {
                 context.Items.Add(i);
             }
-            context.SaveChanges();
+            context.SaveChanges();*/
 
         }
     }
