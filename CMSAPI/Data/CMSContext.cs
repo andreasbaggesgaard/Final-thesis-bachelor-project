@@ -30,21 +30,21 @@ namespace CMSAPI.Data
             builder.Entity<Item>().ToTable("Item");
             builder.Entity<Page>().ToTable("Page");      
             builder.Entity<ContentType>().ToTable("ContentType");
-            
-            builder.Entity<Page>() 
+
+            builder.Entity<Page>()
             .HasOne(u => u.Template)
-            .WithMany(u => u.Pages)
-            .IsRequired().OnDelete(DeleteBehavior.Restrict);
+                   .WithMany(u => u.Pages);
+            //.IsRequired().OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Page>()
             .HasOne(u => u.Project)
-            .WithMany(u => u.Pages)
-            .IsRequired().OnDelete(DeleteBehavior.Restrict);
+                   .WithMany(u => u.Pages);
+            //.IsRequired().OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Item>()
             .HasOne(u => u.Project)
-            .WithMany(u => u.Items)
-            .IsRequired().OnDelete(DeleteBehavior.Restrict);
+                   .WithMany(u => u.Items);
+            //.IsRequired().OnDelete(DeleteBehavior.Restrict);
             
             builder.Entity<Template>()
             .HasOne(u => u.Project)
