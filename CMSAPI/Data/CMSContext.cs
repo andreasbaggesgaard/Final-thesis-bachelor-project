@@ -32,43 +32,40 @@ namespace CMSAPI.Data
             builder.Entity<ContentType>().ToTable("ContentType");
 
             builder.Entity<Page>()
-            .HasOne(u => u.Template)
-                   .WithMany(u => u.Pages);
-            //.IsRequired().OnDelete(DeleteBehavior.Restrict);
+                .HasOne(u => u.Template)
+                .WithMany(u => u.Pages);
 
             builder.Entity<Page>()
-            .HasOne(u => u.Project)
-                   .WithMany(u => u.Pages);
-            //.IsRequired().OnDelete(DeleteBehavior.Restrict);
+                .HasOne(u => u.Project)
+                .WithMany(u => u.Pages);
 
             builder.Entity<Item>()
-            .HasOne(u => u.Project)
-                   .WithMany(u => u.Items);
-            //.IsRequired().OnDelete(DeleteBehavior.Restrict);
+                .HasOne(u => u.Project)
+                .WithMany(u => u.Items);
             
             builder.Entity<Template>()
-            .HasOne(u => u.Project)
-            .WithMany(u => u.Templates);
+                .HasOne(u => u.Project)
+                .WithMany(u => u.Templates);
             
             builder.Entity<Project>()
-            .HasMany(u => u.Templates)
-            .WithOne(x => x.Project);
+                .HasMany(u => u.Templates)
+                .WithOne(x => x.Project);
 
             builder.Entity<Project>()
-            .HasMany(u => u.Items)
-            .WithOne(x => x.Project);
+                .HasMany(u => u.Items)
+                .WithOne(x => x.Project);
 
             builder.Entity<Project>()
-            .HasMany(u => u.Pages)
-            .WithOne(x => x.Project);
+                .HasMany(u => u.Pages)
+                .WithOne(x => x.Project);
 
             builder.Entity<Project>()
-            .HasMany(u => u.Templates)
-            .WithOne(x => x.Project);
+                .HasMany(u => u.Templates)
+                .WithOne(x => x.Project);
             
             builder.Entity<Project>()
-                   .HasMany(u => u.Menu)
-                   .WithOne(x => x.Project);
+                .HasMany(u => u.Menu)
+                .WithOne(x => x.Project);
 
             builder.Entity<Menu>()
                 .HasKey(c => new { c.PageID, c.ProjectID });

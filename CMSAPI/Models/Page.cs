@@ -17,7 +17,5 @@ namespace CMSAPI.Models
         public ICollection<Item> Items { get; set; }
         public Project Project { get; set; }
         public Menu Menu { get; set; }
-
-
     }
 }

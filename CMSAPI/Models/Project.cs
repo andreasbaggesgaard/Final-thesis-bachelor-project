@@ -17,7 +17,6 @@ namespace CMSAPI.Models
         public ICollection<Menu> Menu { get; set; }
         public ICollection<Item> Items { get; set; }
         public ICollection<Page> Pages { get; set; }
-        //public ICollection<ContentType> ContentTypes { get; set; }
         public ICollection<Template> Templates { get; set; }
 
     }
